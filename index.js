@@ -1,4 +1,7 @@
 
+const redux = require('redux');
+const createStore = redux.createStore
+
 const CAKE_ORDERED = 'CAKE_ORDERED';
 
 function orderCake(){
@@ -24,3 +27,14 @@ const reducer = (state= initialState, action) =>{
                 return state
     }
 }
+
+const store = createStore(reducer)
+console.log('Initial State', store.getState())  //allow access to state via getState()
+
+const unsubscribe = store.subscribe(() => console.log('pdate state', store.getState())) //register listener
+
+store.dispatch(orderCake()) //allow state to be updated
+store.dispatch(orderCake())
+store.dispatch(orderCake())
+
+unsubscribe() //unregister listener 
