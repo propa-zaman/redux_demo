@@ -3,11 +3,19 @@ const redux = require('redux');
 const createStore = redux.createStore
 
 const CAKE_ORDERED = 'CAKE_ORDERED';
+const CAKE_RESTOCKED = 'CAKE_RESTOCKED';
 
-function orderCake(){
-  return  {
+function orderCake() {
+    return {
         type: CAKE_ORDERED,
         quantity: 1,
+    }
+}
+
+function restockCake(qty = 1) {
+    return {
+        type: CAKE_RESTOCKED,
+        quantity: qty,
     }
 }
 
@@ -17,14 +25,22 @@ const initialState = {
 
 // (previousState, action) => newState
 
-const reducer = (state= initialState, action) =>{
-    switch(action.type){
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
         case CAKE_ORDERED:
-            return{
+            return {
+                ...state,
                 numOfCakes: state.numOfCakes - 1,
             }
-            default:
-                return state
+
+
+        case CAKE_RESTOCKED:
+            return {
+                ...state,
+                numOfCakes: state.numOfCakes + action.quantity,
+            }
+        default:
+            return state
     }
 }
 
@@ -36,5 +52,6 @@ const unsubscribe = store.subscribe(() => console.log('pdate state', store.getSt
 store.dispatch(orderCake()) //allow state to be updated
 store.dispatch(orderCake())
 store.dispatch(orderCake())
+store.dispatch(restockCake(3))
 
 unsubscribe() //unregister listener 
