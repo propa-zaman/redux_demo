@@ -1,6 +1,7 @@
 
 const redux = require('redux');
-const createStore = redux.createStore
+const createStore = redux.createStore;
+const bindActionCreators = redux.bindActionCreators //to pass action objects as props
 
 const CAKE_ORDERED = 'CAKE_ORDERED';
 const CAKE_RESTOCKED = 'CAKE_RESTOCKED';
@@ -8,14 +9,14 @@ const CAKE_RESTOCKED = 'CAKE_RESTOCKED';
 function orderCake() {
     return {
         type: CAKE_ORDERED,
-        quantity: 1,
+        payload: 1,
     }
 }
 
 function restockCake(qty = 1) {
     return {
         type: CAKE_RESTOCKED,
-        quantity: qty,
+        payload: qty,
     }
 }
 
@@ -37,7 +38,7 @@ const reducer = (state = initialState, action) => {
         case CAKE_RESTOCKED:
             return {
                 ...state,
-                numOfCakes: state.numOfCakes + action.quantity,
+                numOfCakes: state.numOfCakes + action.payload,
             }
         default:
             return state
@@ -49,9 +50,16 @@ console.log('Initial State', store.getState())  //allow access to state via getS
 
 const unsubscribe = store.subscribe(() => console.log('pdate state', store.getState())) //register listener
 
-store.dispatch(orderCake()) //allow state to be updated
-store.dispatch(orderCake())
-store.dispatch(orderCake())
-store.dispatch(restockCake(3))
+// store.dispatch(orderCake()) //allow state to be updated
+// store.dispatch(orderCake())
+// store.dispatch(orderCake())
+// store.dispatch(restockCake(6))
+
+const actions = bindActionCreators({orderCake, restockCake}, store.dispatch)
+
+actions.orderCake();
+actions.orderCake();
+actions.orderCake();
+actions.restockCake(3);
 
 unsubscribe() //unregister listener 
