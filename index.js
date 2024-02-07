@@ -1,15 +1,18 @@
 
 const redux = require('redux');
-const createStore = redux.createStore;
+const createStore = redux.createStore; //to create reduxStore
 const bindActionCreators = redux.bindActionCreators //to pass action objects as props
 const combineReducers = redux.combineReducers //to pass multiple reducers
+
+const reduxLogger = require('redux-logger');
+const logger = reduxLogger.createLogger(); //middleware
 
 const CAKE_ORDERED = 'CAKE_ORDERED';
 const CAKE_RESTOCKED = 'CAKE_RESTOCKED';
 const ICECREAM_ORDERED = 'ICECREAM_ORDERED';
 const ICECREAM_RESTOCKED = 'ICECREAM_RESTOCKED';
 
-
+//actions
 function orderCake() {
     return {
         type: CAKE_ORDERED,
@@ -52,7 +55,7 @@ const initialIceCreamState = {
 }
 
 // (previousState, action) => newState
-
+//reducers
 const cakeReducer = (state = initialCakeState, action) => {
     switch (action.type) {
         case CAKE_ORDERED:
@@ -99,7 +102,7 @@ const rootReducers = combineReducers({
 const store = createStore(rootReducers)
 console.log('Initial State', store.getState())  //allow access to state via getState()
 
-const unsubscribe = store.subscribe(() => console.log('pdate state', store.getState())) //register listener
+const unsubscribe = store.subscribe(() => console.log('Update state', store.getState())) //register listener
 
 // store.dispatch(orderCake()) //allow state to be updated
 // store.dispatch(orderCake())
